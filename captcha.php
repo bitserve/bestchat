@@ -1,5 +1,7 @@
 <?php
 
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
 session_start();
 header("Cache-Control: no-cache, must-revalidate");
 header("Content-Type: image/jpeg");
