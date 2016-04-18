@@ -18,6 +18,7 @@ function bestchat_logout() {
 
 function bestchat_login() {
   $captcha = @trim($_POST['captcha']);
+  if (strlen($captcha) <= 0) { return "Captcha error"; }
   if ($captcha !== @$_SESSION['captcha']) { return "Captcha error"; }
   $nick = @strtolower(trim($_POST['nick']));
   $pass = @$_POST['pass'];
