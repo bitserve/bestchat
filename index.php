@@ -14,20 +14,8 @@ if (@$_POST['login']) {
   exit(0);
 }
 
-$content = @trim($_POST['content']);
-
-if (strlen($content)) {
-  bestchat_query(
-    "insert into `bc_msg` set ",
-    "   `when` = now(),       ",
-    "   `sender` = :nick,     ",
-    "   `content` = :content  ",
-    [
-      ':nick' => $_SESSION['nick'],
-      ':content' => $content
-    ]
-  );
-
+if (isset($_POST['content'])) {
+  bestchat_add_message($_POST['content']);
   header("Location: /");
   exit(0);
 }

@@ -117,6 +117,11 @@ function bestchat_query() {
     if (is_string($x)) {
       $sql[] = $x;
     } else if (is_array($x)) {
+      foreach ($x as $key => $y) {
+        if (substr($key, 0, 1) !== ':') { throw new Exception("Query arguments must start with :"); }
+        if (!is_scalar($y)) { throw new Exception("Only pass scalars to sql queries"); }
+      }
+
       $params = array_merge($params, $x);
     } else {
       throw new Exception("Only pass strings or arrays");
@@ -136,4 +141,22 @@ function bestchat_get_messages() {
     "order by `when` desc",
     "limit 50"
   )->fetchAll();
+}
+
+function bestchat_add_message($content) {
+  if (!bestchat_is_logged_in()) { return; }
+  if (!is_string($content)) { return; }
+  $content = @trim($content);
+  if (strlen($content) <= 0) { return; }
+
+  bestchat_query(
+    "insert into `bc_msg` set ",
+    "   `when` = now(),       ",
+    "   `sender` = :nick,     ",
+    "   `content` = :content  ",
+    [
+      ':nick' => $_SESSION['nick'],
+      ':content' => $content
+    ]
+  );
 }
