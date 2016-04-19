@@ -149,6 +149,7 @@ function bestchat_add_message($content) {
   if (!is_string($content)) { return; }
   $content = @trim($content);
   if (strlen($content) <= 0) { return; }
+  if (!preg_match('#^[a-z]+[a-z0-9_]*$#i', $_SESSION['nick'])) { bestchat_logout(); }
 
   bestchat_query(
     "insert into `bc_msg` set ",

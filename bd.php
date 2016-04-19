@@ -6,6 +6,8 @@ $messages = bestchat_get_messages();
 $hash = bestchat_get_hash($messages);
 bestchat_check_etag($messages, $hash);
 
+$me = @trim($_SESSION['nick']);
+
 ?>
 <!doctype html>
 <html>
@@ -58,12 +60,25 @@ html, body {
   border-radius: 3px;
 }
 
+.mention {
+  background: #ffc;
+}
+
 </style>
 </head>
 <body>
 
-<? foreach (array_reverse($messages) as $msg): ?>
-<div class="msg">
+<? foreach (array_reverse($messages) as $msg):
+  $class = "msg";
+
+  if (strlen($me)) {
+    if (stripos($msg->content, "@$me") !== false) {
+      $class = "$class mention";
+    }
+  }
+
+?>
+<div class="<?php echo $class ?>">
   <span class="when"><?php echo htmlspecialchars($msg->when) ?></span>
   <span class="sender"><span><?php echo htmlspecialchars($msg->sender) ?></span></span>
   <span class="content"><?php echo htmlspecialchars($msg->content) ?></span>
