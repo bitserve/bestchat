@@ -25,6 +25,7 @@ function bestchat_login() {
   if (strlen($nick) < 3) { return "Nick must be at least 3 chars"; }
   if (strlen($pass) < 6) { return "Password must be 6 chars"; }
   if (strlen($nick) > 10) { return "Nick cannot be longer than 10 chars"; }
+  if (!preg_match($nick, '#^[a-z]+[a-z0-9_]*$#i')) { return "Nick must contain only basic characters"; }
 
   $user = bestchat_query(
     "select * from `bc_user`",
